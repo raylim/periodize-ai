@@ -1,0 +1,30 @@
+-- Minimal UserProfile table needed for onboarding gate (Phase 1/2).
+-- Full schema with all 10 tables is built in Phase 2 (p2-sqldelight).
+
+CREATE TABLE UserProfile (
+    id                      TEXT NOT NULL PRIMARY KEY,
+    name                    TEXT NOT NULL DEFAULT '',
+    weightUnit              TEXT NOT NULL DEFAULT 'lbs',
+    hasCompletedOnboarding  INTEGER NOT NULL DEFAULT 0,
+    squatMax                REAL,
+    benchMax                REAL,
+    deadliftMax             REAL,
+    ohpMax                  REAL,
+    trainingFrequency       INTEGER NOT NULL DEFAULT 4,
+    deadliftStanceRaw       TEXT NOT NULL DEFAULT 'conventional',
+    squatStanceRaw          TEXT NOT NULL DEFAULT 'shoulder_width',
+    createdAt               INTEGER NOT NULL DEFAULT 0
+);
+
+selectFirst:
+SELECT * FROM UserProfile LIMIT 1;
+
+insert:
+INSERT OR REPLACE INTO UserProfile (
+    id, name, weightUnit, hasCompletedOnboarding,
+    squatMax, benchMax, deadliftMax, ohpMax,
+    trainingFrequency, deadliftStanceRaw, squatStanceRaw, createdAt
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateOnboardingComplete:
+UPDATE UserProfile SET hasCompletedOnboarding = 1 WHERE id = ?;

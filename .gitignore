@@ -1,0 +1,13 @@
+.gradle/
+build/
+*.gradle.kts.bak
+local.properties
+*.iml
+.idea/
+.DS_Store
+xcuserdata/
+*.xcworkspace/xcuserdata/
+DerivedData/
+*.ipa
+*.dSYM.zip
+*.dSYM
