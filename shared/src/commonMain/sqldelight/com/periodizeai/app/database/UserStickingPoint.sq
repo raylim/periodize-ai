@@ -1,0 +1,24 @@
+-- StickingPoint table stores the USER's selected sticking points per lift.
+-- The StickingPoint enum variants themselves live in Kotlin (Enums.kt).
+CREATE TABLE UserStickingPoint (
+    id             TEXT NOT NULL PRIMARY KEY,
+    userProfileId  TEXT NOT NULL REFERENCES UserProfile(id) ON DELETE CASCADE,
+    liftCategoryRaw TEXT NOT NULL,          -- LiftCategory raw value
+    stickingPointRaw TEXT NOT NULL          -- StickingPoint raw value
+);
+
+selectByProfile:
+SELECT * FROM UserStickingPoint WHERE userProfileId = ?;
+
+selectByLift:
+SELECT * FROM UserStickingPoint WHERE userProfileId = ? AND liftCategoryRaw = ?;
+
+upsert:
+INSERT OR REPLACE INTO UserStickingPoint (id, userProfileId, liftCategoryRaw, stickingPointRaw)
+VALUES (?, ?, ?, ?);
+
+deleteByLift:
+DELETE FROM UserStickingPoint WHERE userProfileId = ? AND liftCategoryRaw = ?;
+
+deleteAll:
+DELETE FROM UserStickingPoint WHERE userProfileId = ?;

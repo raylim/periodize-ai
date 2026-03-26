@@ -36,6 +36,18 @@
             </intent-filter>
         </activity>
 
+        <!-- Home screen widget -->
+        <receiver
+            android:name="com.periodizeai.app.widget.WorkoutWidgetReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/workout_widget_info" />
+        </receiver>
+
     </application>
 
 </manifest>

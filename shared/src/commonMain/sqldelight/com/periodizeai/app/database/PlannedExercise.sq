@@ -1,0 +1,44 @@
+CREATE TABLE PlannedExercise (
+    id                      TEXT NOT NULL PRIMARY KEY,
+    workoutId               TEXT NOT NULL REFERENCES PlannedWorkout(id) ON DELETE CASCADE,
+    exerciseId              TEXT REFERENCES Exercise(id) ON DELETE SET NULL,
+    exerciseOrder           INTEGER NOT NULL,
+    sets                    INTEGER NOT NULL,
+    reps                    INTEGER NOT NULL,
+    isAMRAP                 INTEGER NOT NULL DEFAULT 0,
+    targetRPE               REAL,
+    targetRIR               INTEGER,
+    percentageOfMax         REAL,
+    suggestedWeight         REAL,
+    roleRaw                 TEXT NOT NULL DEFAULT 'mainLift',
+    isSwapped               INTEGER NOT NULL DEFAULT 0,
+    deloadSetWeightsRaw     TEXT,       -- comma-separated doubles
+    prescribedWarmupSetCount INTEGER NOT NULL DEFAULT 0,
+    perSetTargetRepsRaw     TEXT,       -- comma-separated ints
+    amrapSetIndex           INTEGER NOT NULL DEFAULT -1,
+    dropPercentage          REAL,
+    intensityTierRaw        TEXT
+);
+
+selectByWorkout:
+SELECT * FROM PlannedExercise WHERE workoutId = ? ORDER BY exerciseOrder ASC;
+
+selectById:
+SELECT * FROM PlannedExercise WHERE id = ?;
+
+insert:
+INSERT OR REPLACE INTO PlannedExercise (
+    id, workoutId, exerciseId, exerciseOrder, sets, reps, isAMRAP,
+    targetRPE, targetRIR, percentageOfMax, suggestedWeight, roleRaw,
+    isSwapped, deloadSetWeightsRaw, prescribedWarmupSetCount,
+    perSetTargetRepsRaw, amrapSetIndex, dropPercentage, intensityTierRaw
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateSuggestedWeight:
+UPDATE PlannedExercise SET suggestedWeight = ? WHERE id = ?;
+
+markSwapped:
+UPDATE PlannedExercise SET isSwapped = 1, exerciseId = ? WHERE id = ?;
+
+delete:
+DELETE FROM PlannedExercise WHERE id = ?;

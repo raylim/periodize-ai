@@ -1,10 +1,16 @@
 import SwiftUI
 import Shared
+import WidgetKit
 
 struct ContentView: View {
     var body: some View {
         ComposeView()
             .ignoresSafeArea(.keyboard)
+            .onReceive(
+                NotificationCenter.default.publisher(for: NSNotification.Name("PeriodizeAIRefreshWidget"))
+            ) { _ in
+                WidgetCenter.shared.reloadAllTimelines()
+            }
     }
 }
 

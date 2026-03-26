@@ -1,0 +1,55 @@
+CREATE TABLE WorkoutSession (
+    id                          TEXT NOT NULL PRIMARY KEY,
+    date                        INTEGER NOT NULL,           -- epoch ms
+    durationMs                  INTEGER,
+    notes                       TEXT,
+    isImported                  INTEGER NOT NULL DEFAULT 0,
+    isCompleted                 INTEGER NOT NULL DEFAULT 0,
+    linkedPlannedWorkoutId      TEXT,
+    -- Readiness scores (1-5 scale, null if not assessed)
+    readinessSquatScore         INTEGER,
+    readinessBenchScore         INTEGER,
+    readinessDeadliftScore      INTEGER,
+    readinessSleep              INTEGER,
+    readinessNutrition          INTEGER,
+    readinessStress             INTEGER,
+    readinessEnergy             INTEGER,
+    readinessSorenessPecs       INTEGER,
+    readinessSorenessLats       INTEGER,
+    readinessSorenessLowerBack  INTEGER,
+    readinessSorenessGlutesHams INTEGER,
+    readinessSorenessQuads      INTEGER
+);
+
+selectAll:
+SELECT * FROM WorkoutSession ORDER BY date DESC;
+
+selectRecent:
+SELECT * FROM WorkoutSession ORDER BY date DESC LIMIT :limit;
+
+selectById:
+SELECT * FROM WorkoutSession WHERE id = ?;
+
+selectByDateRange:
+SELECT * FROM WorkoutSession WHERE date >= :startMs AND date <= :endMs ORDER BY date DESC;
+
+selectCompleted:
+SELECT * FROM WorkoutSession WHERE isCompleted = 1 ORDER BY date DESC;
+
+insert:
+INSERT OR REPLACE INTO WorkoutSession (
+    id, date, durationMs, notes, isImported, isCompleted, linkedPlannedWorkoutId,
+    readinessSquatScore, readinessBenchScore, readinessDeadliftScore,
+    readinessSleep, readinessNutrition, readinessStress, readinessEnergy,
+    readinessSorenessPecs, readinessSorenessLats, readinessSorenessLowerBack,
+    readinessSorenessGlutesHams, readinessSorenessQuads
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+markCompleted:
+UPDATE WorkoutSession SET isCompleted = 1, durationMs = ? WHERE id = ?;
+
+delete:
+DELETE FROM WorkoutSession WHERE id = ?;
+
+deleteAll:
+DELETE FROM WorkoutSession;

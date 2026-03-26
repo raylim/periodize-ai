@@ -1,30 +1,65 @@
--- Minimal UserProfile table needed for onboarding gate (Phase 1/2).
--- Full schema with all 10 tables is built in Phase 2 (p2-sqldelight).
-
 CREATE TABLE UserProfile (
     id                      TEXT NOT NULL PRIMARY KEY,
     name                    TEXT NOT NULL DEFAULT '',
-    weightUnit              TEXT NOT NULL DEFAULT 'lbs',
+    weightUnitRaw           TEXT NOT NULL DEFAULT 'lb',
+    goalRaw                 TEXT NOT NULL DEFAULT 'Powerlifting',
     hasCompletedOnboarding  INTEGER NOT NULL DEFAULT 0,
-    squatMax                REAL,
-    benchMax                REAL,
-    deadliftMax             REAL,
-    ohpMax                  REAL,
-    trainingFrequency       INTEGER NOT NULL DEFAULT 4,
-    deadliftStanceRaw       TEXT NOT NULL DEFAULT 'conventional',
-    squatStanceRaw          TEXT NOT NULL DEFAULT 'shoulder_width',
+    hasImportedCSV          INTEGER NOT NULL DEFAULT 0,
+    userBodyWeight          REAL NOT NULL DEFAULT 175.0,
+    barbellWeight           REAL NOT NULL DEFAULT 45.0,
+    availablePlatesLbRaw    TEXT NOT NULL DEFAULT '2.5,5,10,25,35,45',
+    availablePlatesKgRaw    TEXT NOT NULL DEFAULT '1.25,2.5,5,10,15,20,25',
+    restTimerMainLift       INTEGER NOT NULL DEFAULT 180,
+    restTimerCompound       INTEGER NOT NULL DEFAULT 120,
+    restTimerIsolation      INTEGER NOT NULL DEFAULT 90,
+    healthKitEnabled        INTEGER NOT NULL DEFAULT 0,
+    syncBodyWeightFromHealth INTEGER NOT NULL DEFAULT 0,
+    deadliftStanceRaw       TEXT NOT NULL DEFAULT 'Conventional',
+    meetDateMs              INTEGER,
+    sexRaw                  TEXT NOT NULL DEFAULT 'Male',
+    userHeight              REAL NOT NULL DEFAULT 70.0,
+    userAge                 INTEGER NOT NULL DEFAULT 30,
+    dateOfBirthMs           INTEGER,
+    trainingAge             INTEGER NOT NULL DEFAULT 2,
+    strengthLevelRaw        TEXT NOT NULL DEFAULT 'Intermediate',
+    dietStatusRaw           TEXT NOT NULL DEFAULT 'Maintenance',
+    sleepQualityRaw         TEXT NOT NULL DEFAULT 'Average',
+    stressLevelRaw          TEXT NOT NULL DEFAULT 'Average',
+    trainingDaysPerWeek     INTEGER NOT NULL DEFAULT 4,
     createdAt               INTEGER NOT NULL DEFAULT 0
 );
 
 selectFirst:
 SELECT * FROM UserProfile LIMIT 1;
 
+selectById:
+SELECT * FROM UserProfile WHERE id = ?;
+
 insert:
 INSERT OR REPLACE INTO UserProfile (
-    id, name, weightUnit, hasCompletedOnboarding,
-    squatMax, benchMax, deadliftMax, ohpMax,
-    trainingFrequency, deadliftStanceRaw, squatStanceRaw, createdAt
-) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    id, name, weightUnitRaw, goalRaw, hasCompletedOnboarding, hasImportedCSV,
+    userBodyWeight, barbellWeight, availablePlatesLbRaw, availablePlatesKgRaw,
+    restTimerMainLift, restTimerCompound, restTimerIsolation,
+    healthKitEnabled, syncBodyWeightFromHealth, deadliftStanceRaw, meetDateMs,
+    sexRaw, userHeight, userAge, dateOfBirthMs, trainingAge,
+    strengthLevelRaw, dietStatusRaw, sleepQualityRaw, stressLevelRaw,
+    trainingDaysPerWeek, createdAt
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 updateOnboardingComplete:
 UPDATE UserProfile SET hasCompletedOnboarding = 1 WHERE id = ?;
+
+updateRestTimers:
+UPDATE UserProfile SET restTimerMainLift = ?, restTimerCompound = ?, restTimerIsolation = ? WHERE id = ?;
+
+updatePlates:
+UPDATE UserProfile SET availablePlatesLbRaw = ?, availablePlatesKgRaw = ? WHERE id = ?;
+
+updateHealthKit:
+UPDATE UserProfile SET healthKitEnabled = ?, syncBodyWeightFromHealth = ? WHERE id = ?;
+
+updateBodyWeight:
+UPDATE UserProfile SET userBodyWeight = ? WHERE id = ?;
+
+delete:
+DELETE FROM UserProfile WHERE id = ?;

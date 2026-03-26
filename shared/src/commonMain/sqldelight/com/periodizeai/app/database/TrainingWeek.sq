@@ -1,0 +1,23 @@
+CREATE TABLE TrainingWeek (
+    id          TEXT NOT NULL PRIMARY KEY,
+    blockId     TEXT NOT NULL REFERENCES TrainingBlock(id) ON DELETE CASCADE,
+    weekNumber  INTEGER NOT NULL,
+    subPhaseRaw TEXT NOT NULL DEFAULT 'Training',
+    isCompleted INTEGER NOT NULL DEFAULT 0
+);
+
+selectByBlock:
+SELECT * FROM TrainingWeek WHERE blockId = ? ORDER BY weekNumber ASC;
+
+selectById:
+SELECT * FROM TrainingWeek WHERE id = ?;
+
+insert:
+INSERT OR REPLACE INTO TrainingWeek (id, blockId, weekNumber, subPhaseRaw, isCompleted)
+VALUES (?, ?, ?, ?, ?);
+
+markCompleted:
+UPDATE TrainingWeek SET isCompleted = 1 WHERE id = ?;
+
+delete:
+DELETE FROM TrainingWeek WHERE id = ?;

@@ -1,0 +1,43 @@
+CREATE TABLE CompletedSet (
+    id            TEXT NOT NULL PRIMARY KEY,
+    sessionId     TEXT NOT NULL REFERENCES WorkoutSession(id) ON DELETE CASCADE,
+    exerciseId    TEXT REFERENCES Exercise(id) ON DELETE SET NULL,
+    setNumber     INTEGER NOT NULL,
+    setOrder      INTEGER NOT NULL,
+    weight        REAL NOT NULL,
+    reps          INTEGER NOT NULL,
+    rpe           REAL,
+    rir           INTEGER,
+    isWarmup      INTEGER NOT NULL DEFAULT 0,
+    isAMRAP       INTEGER NOT NULL DEFAULT 0,
+    completedAt   INTEGER,                -- epoch ms
+    usesBodyWeight INTEGER NOT NULL DEFAULT 0,
+    bandTypeRaw   TEXT
+);
+
+selectBySession:
+SELECT * FROM CompletedSet WHERE sessionId = ? ORDER BY setOrder ASC, setNumber ASC;
+
+selectByExercise:
+SELECT * FROM CompletedSet WHERE exerciseId = ? AND isWarmup = 0 ORDER BY completedAt DESC;
+
+selectWorkingSets:
+SELECT * FROM CompletedSet WHERE sessionId = ? AND isWarmup = 0 ORDER BY setOrder ASC;
+
+selectBestSetForExercise:
+SELECT * FROM CompletedSet
+WHERE exerciseId = ? AND isWarmup = 0 AND reps > 0
+ORDER BY weight DESC
+LIMIT 1;
+
+insert:
+INSERT OR REPLACE INTO CompletedSet (
+    id, sessionId, exerciseId, setNumber, setOrder, weight, reps,
+    rpe, rir, isWarmup, isAMRAP, completedAt, usesBodyWeight, bandTypeRaw
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+delete:
+DELETE FROM CompletedSet WHERE id = ?;
+
+deleteBySession:
+DELETE FROM CompletedSet WHERE sessionId = ?;

@@ -38,6 +38,7 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(compose.materialIconsExtended)
 
             // Lifecycle / ViewModel
             implementation(libs.lifecycle.viewmodel.compose)
@@ -79,6 +80,7 @@ kotlin {
             implementation(libs.health.connect.client)
             implementation(libs.glance.appwidget)
             implementation(libs.glance.material3)
+            implementation(libs.play.services.wearable)
         }
 
         iosMain.dependencies {

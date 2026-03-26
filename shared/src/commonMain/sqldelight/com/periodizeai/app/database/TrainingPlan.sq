@@ -1,0 +1,29 @@
+CREATE TABLE TrainingPlan (
+    id                  TEXT NOT NULL PRIMARY KEY,
+    name                TEXT NOT NULL,
+    isActive            INTEGER NOT NULL DEFAULT 1,
+    trainingDaysPerWeek INTEGER NOT NULL DEFAULT 4,
+    createdAt           INTEGER NOT NULL
+);
+
+selectAll:
+SELECT * FROM TrainingPlan ORDER BY createdAt DESC;
+
+selectActive:
+SELECT * FROM TrainingPlan WHERE isActive = 1 LIMIT 1;
+
+selectById:
+SELECT * FROM TrainingPlan WHERE id = ?;
+
+insert:
+INSERT OR REPLACE INTO TrainingPlan (id, name, isActive, trainingDaysPerWeek, createdAt)
+VALUES (?, ?, ?, ?, ?);
+
+setActive:
+UPDATE TrainingPlan SET isActive = 0;
+
+activate:
+UPDATE TrainingPlan SET isActive = 1 WHERE id = ?;
+
+delete:
+DELETE FROM TrainingPlan WHERE id = ?;

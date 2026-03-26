@@ -7,8 +7,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.periodizeai.app.navigation.Screen
+import com.periodizeai.app.ui.exerciselibrary.CreateExerciseScreen
+import com.periodizeai.app.ui.exerciselibrary.ExerciseLibraryScreen
 import com.periodizeai.app.ui.onboarding.OnboardingScreen
+import com.periodizeai.app.ui.planeditor.PlanEditorScreen
 import com.periodizeai.app.ui.root.MainScaffold
+import com.periodizeai.app.ui.workout.WorkoutExecutionScreen
 import com.periodizeai.app.ui.theme.PeriodizeAITheme
 import com.periodizeai.app.viewmodels.UserProfileViewModel
 import org.koin.compose.viewmodel.koinViewModel
@@ -44,6 +48,10 @@ fun App() {
             composable(Screen.Analytics.route) { MainScaffold(navController) }
             composable(Screen.Settings.route)  { MainScaffold(navController) }
 
+            composable(Screen.ExerciseLibrary.route) { ExerciseLibraryScreen(navController) }
+            composable(Screen.CreateExercise.route) { CreateExerciseScreen(navController) }
+            composable(Screen.PlanEditor.route) { PlanEditorScreen(navController) }
+
             // Deep link: periodizeai://workout/{uuid}
             composable(
                 route = Screen.WorkoutDetail.route,
@@ -54,9 +62,8 @@ fun App() {
                     }
                 )
             ) { backStackEntry ->
-                val workoutId = backStackEntry.arguments?.getString(Screen.WorkoutDetail.ARG)
-                // WorkoutDetailScreen(workoutId = workoutId ?: "")
-                // Placeholder until WorkoutDetailScreen is built in Phase 5
+                val workoutId = backStackEntry.arguments?.getString(Screen.WorkoutDetail.ARG) ?: ""
+                WorkoutExecutionScreen(workoutId = workoutId, navController = navController)
             }
         }
     }
