@@ -1,6 +1,6 @@
 [versions]
 kotlin                  = "2.1.21"
-compose-multiplatform   = "1.7.3"
+compose-multiplatform   = "1.8.1"
 kmp-lifecycle           = "2.9.0"
 sqldelight              = "2.0.2"
 navigation-compose      = "2.8.0-alpha10"

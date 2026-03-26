@@ -11,3 +11,5 @@ DerivedData/
 *.ipa
 *.dSYM.zip
 *.dSYM
+iosApp/build/
+iosApp/PeriodizeAI.xcodeproj/project.xcworkspace/xcuserdata/
