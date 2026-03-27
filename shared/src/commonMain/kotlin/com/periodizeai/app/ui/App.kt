@@ -62,7 +62,7 @@ fun App() {
                     }
                 )
             ) { backStackEntry ->
-                val workoutId = backStackEntry.arguments?.getString(Screen.WorkoutDetail.ARG) ?: ""
+                val workoutId = backStackEntry.savedStateHandle.get<String>(Screen.WorkoutDetail.ARG) ?: ""
                 WorkoutExecutionScreen(workoutId = workoutId, navController = navController)
             }
         }

@@ -5,7 +5,10 @@ import com.periodizeai.app.di.initKoin
 import com.periodizeai.app.ui.App
 
 fun MainViewController() = ComposeUIViewController(
-    configure = { initKoin() }
+    configure = {
+        enforceStrictPlistSanityCheck = false
+        initKoin()
+    }
 ) {
     App()
 }
